@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botanical Slideshow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #F1F8E9, #DCEDC8);
+            color: #33691E;
+        }
+
+        .slideshow-container {
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            color: #2E7D32;
+            margin-top: 0;
+        }
+
+        h2 {
+            color: #1B5E20;
+            font-style: italic;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        #error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slideshow-container">
+        <h1 id="slideshow-title"></h1>
+        <h2 id="slideshow-name"></h2>
+        <p id="slideshow-description"></p>
+        <p id="slideshow-type"></p>
+        <p id="error-message"></p>
+    </div>
+
+    <script>
+        // This object would typically be populated from a database or API
+        const slideshows = {
+            "1": {
+                title: "Beautiful Rose",
+                name: "Rosa 'Peace'",
+                description: "A stunning hybrid tea rose known for its large, yellow flowers edged with pink.",
+                type: "Flower"
+            },
+            // Add more slideshows here as needed
+        };
+
+        function loadSlideshow() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            const encodedData = urlParams.get('data');
+
+            if (encodedData) {
+                try {
+                    const decodedData = JSON.parse(decodeURIComponent(encodedData));
+                    displaySlideshow(decodedData);
+                } catch (error) {
+                    showError('Error parsing slideshow data: ' + error.message);
+                }
+            } else if (id) {
+                if (slideshows[id]) {
+                    displaySlideshow(slideshows[id]);
+                } else {
+                    showError('Slideshow with ID ' + id + ' not found');
+                }
+            } else {
+                showError('No slideshow data or ID provided');
+            }
+        }
+
+        function displaySlideshow(data) {
+            document.getElementById('slideshow-title').textContent = data.title || 'No Title';
+            document.getElementById('slideshow-name').textContent = data.name || 'No Name';
+            document.getElementById('slideshow-description').textContent = data.description || 'No Description';
+            document.getElementById('slideshow-type').textContent = 'Type: ' + (data.type || 'Not Specified');
+        }
+
+        function showError(message) {
+            document.getElementById('error-message').textContent = message;
+        }
+
+        window.onload = loadSlideshow;
+    </script>
+</body>
+
+</html>
