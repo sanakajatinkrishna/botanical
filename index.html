@@ -24,7 +24,21 @@
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .slideshow-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slideshow-content {
             padding: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
         }
 
         h1 {
@@ -44,28 +58,44 @@
         #error-message {
             color: red;
             font-weight: bold;
+            padding: 20px;
+        }
+
+        .fade-in {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 
 <body>
     <div class="slideshow-container">
-        <h1 id="slideshow-title"></h1>
-        <h2 id="slideshow-name"></h2>
-        <p id="slideshow-description"></p>
-        <p id="slideshow-type"></p>
+        <img id="slideshow-image" class="slideshow-image" src="" alt="Slideshow Image">
+        <div class="slideshow-content">
+            <h1 id="slideshow-title"></h1>
+            <h2 id="slideshow-name"></h2>
+            <p id="slideshow-description"></p>
+            <p id="slideshow-type"></p>
+        </div>
         <p id="error-message"></p>
     </div>
 
     <script>
-        // This object would typically be populated from a database or API
         const slideshows = {
+            "default": {
+                title: "Welcome to Botanical Slideshows",
+                name: "Default Slideshow",
+                description: "This is a default slideshow displayed when no specific data is provided.",
+                type: "Information",
+                imagePath: "https://example.com/default-image.jpg"
+            },
             "1": {
                 title: "Beautiful Rose",
                 name: "Rosa 'Peace'",
                 description: "A stunning hybrid tea rose known for its large, yellow flowers edged with pink.",
-                type: "Flower"
-            },
+                type: "Flower",
+                imagePath: "https://example.com/rose-image.jpg"
+            }
             // Add more slideshows here as needed
         };
 
@@ -80,23 +110,31 @@
                     displaySlideshow(decodedData);
                 } catch (error) {
                     showError('Error parsing slideshow data: ' + error.message);
+                    displaySlideshow(slideshows.default);
                 }
-            } else if (id) {
-                if (slideshows[id]) {
-                    displaySlideshow(slideshows[id]);
-                } else {
-                    showError('Slideshow with ID ' + id + ' not found');
-                }
+            } else if (id && slideshows[id]) {
+                displaySlideshow(slideshows[id]);
             } else {
-                showError('No slideshow data or ID provided');
+                displaySlideshow(slideshows.default);
             }
         }
 
         function displaySlideshow(data) {
+            const img = document.getElementById('slideshow-image');
+            img.src = data.imagePath || '';
+            img.alt = data.title || 'Slideshow Image';
+
             document.getElementById('slideshow-title').textContent = data.title || 'No Title';
             document.getElementById('slideshow-name').textContent = data.name || 'No Name';
             document.getElementById('slideshow-description').textContent = data.description || 'No Description';
             document.getElementById('slideshow-type').textContent = 'Type: ' + (data.type || 'Not Specified');
+            document.getElementById('error-message').textContent = '';
+
+            // Trigger animations
+            setTimeout(() => {
+                img.classList.add('fade-in');
+                document.querySelector('.slideshow-content').classList.add('fade-in');
+            }, 100);
         }
 
         function showError(message) {
