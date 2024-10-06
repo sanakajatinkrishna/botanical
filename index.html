@@ -62,8 +62,8 @@
             left: 10%;
             top: 50%;
             transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
+            width: 150px;
+            height: 150px;
             background-color: rgba(255, 255, 255, 0.9);
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
             display: flex;
@@ -76,11 +76,12 @@
 
         .hexagon-label h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 12px;
+            font-size: 18px;
             font-weight: bold;
             margin: 0;
             color: #333;
             text-align: center;
+            padding: 10px;
         }
 
         .label-line {
@@ -196,7 +197,7 @@
                 document.getElementById('slideshow-title').textContent = data.title || 'No Title';
                 document.getElementById('slideshow-name').textContent = data.name || 'No Name';
                 document.getElementById('slideshow-botanical-name').textContent = data.description || 'No Botanical Name';
-                document.getElementById('slideshow-uses').textContent = data.additionalInfo || 'No Uses Specified';
+                document.getElementById('slideshow-uses').textContent = data.additionalInfo || 'No Additional Information';
                 document.getElementById('error-message').textContent = '';
 
                 // Trigger animations
