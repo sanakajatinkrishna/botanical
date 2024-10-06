@@ -27,18 +27,18 @@
             overflow: hidden;
         }
 
-       .slideshow-image {
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: opacity 1s ease-in-out;
-}
+        .slideshow-image {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 1s ease-in-out;
+        }
 
         .content-overlay {
             position: absolute;
@@ -195,8 +195,8 @@
 
                 document.getElementById('slideshow-title').textContent = data.title || 'No Title';
                 document.getElementById('slideshow-name').textContent = data.name || 'No Name';
-                document.getElementById('slideshow-botanical-name').textContent = data.botanicalName || 'No Botanical Name';
-                document.getElementById('slideshow-uses').textContent = data.uses || 'No Uses Specified';
+                document.getElementById('slideshow-botanical-name').textContent = data.description || 'No Botanical Name';
+                document.getElementById('slideshow-uses').textContent = data.additionalInfo || 'No Uses Specified';
                 document.getElementById('error-message').textContent = '';
 
                 // Trigger animations
