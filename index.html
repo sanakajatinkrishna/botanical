@@ -40,60 +40,59 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
-        function loadSlideshow() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const encodedData = urlParams.get('data');
-            if (encodedData) {
-                try {
-                    const decodedData = JSON.parse(decodeURIComponent(encodedData));
-                    console.log("Decoded data:", decodedData);
-                    displaySlideshow(decodedData);
-                } catch (error) {
-                    console.error("Error parsing slideshow data:", error);
-                    showError('Error parsing slideshow data: ' + error.message);
+            function loadSlideshow() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const encodedData = urlParams.get('data');
+                if (encodedData) {
+                    try {
+                        const decodedData = JSON.parse(decodeURIComponent(encodedData));
+                        console.log("Decoded data:", decodedData);
+                        displaySlideshow(decodedData);
+                    } catch (error) {
+                        console.error("Error parsing slideshow data:", error);
+                        showError('Error parsing slideshow data: ' + error.message);
+                    }
+                } else {
+                    showError('No slideshow data provided');
                 }
-            } else {
-                showError('No slideshow data provided');
             }
-        }
 
-        function displaySlideshow(data) {
-            const img = document.getElementById('slideshow-image');
+            function displaySlideshow(data) {
+                const img = document.getElementById('slideshow-image');
 
-            // Get a reference to the image in Firebase Storage
-            const storageRef = firebase.storage().ref(data.imagePath);
+                // Use refFromURL instead of ref
+                const storageRef = firebase.storage().refFromURL(data.imagePath);
 
-            // Get the download URL
-            storageRef.getDownloadURL().then((url) => {
-                img.src = url;
-                img.alt = data.title || 'Slideshow Image';
-                console.log("Image URL:", url);
+                storageRef.getDownloadURL().then((url) => {
+                    img.src = url;
+                    img.alt = data.title || 'Slideshow Image';
+                    console.log("Image URL:", url);
 
-                document.getElementById('slideshow-title').textContent = data.title || 'No Title';
-                document.getElementById('slideshow-name').textContent = data.name || 'No Name';
-                document.getElementById('slideshow-description').textContent = data.description || 'No Description';
-                document.getElementById('slideshow-type').textContent = 'Type: ' + (data.type || 'Not Specified');
-                document.getElementById('slideshow-additional-info').textContent = data.additionalInfo || 'No Additional Information';
-                document.getElementById('error-message').textContent = '';
+                    document.getElementById('slideshow-title').textContent = data.title || 'No Title';
+                    document.getElementById('slideshow-name').textContent = data.name || 'No Name';
+                    document.getElementById('slideshow-description').textContent = data.description || 'No Description';
+                    document.getElementById('slideshow-type').textContent = 'Type: ' + (data.type || 'Not Specified');
+                    document.getElementById('slideshow-additional-info').textContent = data.additionalInfo || 'No Additional Information';
+                    document.getElementById('error-message').textContent = '';
 
-                // Trigger animations
-                setTimeout(() => {
-                    img.classList.add('fade-in');
-                    document.querySelector('.slideshow-content').classList.add('fade-in');
-                }, 100);
-            }).catch((error) => {
-                console.error("Error loading image:", error);
-                showError('Error loading image. Please check the image URL.');
-            });
-        }
+                    // Trigger animations
+                    setTimeout(() => {
+                        img.classList.add('fade-in');
+                        document.querySelector('.slideshow-content').classList.add('fade-in');
+                    }, 100);
+                }).catch((error) => {
+                    console.error("Error loading image:", error);
+                    showError('Error loading image. Please check the image URL.');
+                });
+            }
 
-        function showError(message) {
-            document.getElementById('error-message').textContent = message;
-            console.error(message);
-        }
+            function showError(message) {
+                document.getElementById('error-message').textContent = message;
+                console.error(message);
+            }
 
-        window.onload = loadSlideshow;
-    </script>
-</body>
-
-</html>
+            window.onload = loadSlideshow;
+        </script>
+    </body>
+    
+    </html>
